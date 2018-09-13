@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Function that computes the atom-to-atom component of the objective
 ! function
 !
@@ -57,7 +57,7 @@ double precision function fparc(icart,firstjcart)
       if ( use_short_radius(icart) .or. use_short_radius(jcart) ) then
         short_tol = (short_radius(icart)+short_radius(jcart))**2
         if ( datom < short_tol ) then
-          short_tol_penalty = datom-short_tol 
+          short_tol_penalty = datom-short_tol
           short_tol_scale = dsqrt(short_radius_scale(icart)*short_radius_scale(jcart))
           short_tol_scale = short_tol_scale*(tol**2/short_tol**2)
           fparc = fparc + fscale(icart)*fscale(jcart)*short_tol_scale*short_tol_penalty**2
@@ -74,4 +74,3 @@ double precision function fparc(icart,firstjcart)
   end do
 
 end function fparc
-

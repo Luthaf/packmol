@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 
 !
 ! Arrays required by the flashsort package. Used only in heuristics, but
@@ -18,4 +18,3 @@ module flashsort
   integer :: mflash
 
 end module flashsort
-

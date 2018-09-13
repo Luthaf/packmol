@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Module that carries the input parameters read from the input file
 !
 
@@ -17,7 +17,7 @@ module input
   integer :: nloop, nloop_all
   integer :: writeout
   integer :: ntfix
-  integer :: ntcon(9) 
+  integer :: ntcon(9)
 
   integer, allocatable :: nconnect(:,:)  ! (ntotat,9)
   integer, allocatable :: irestline(:) ! (maxrest)
@@ -33,7 +33,7 @@ module input
   double precision :: sidemax
   double precision :: discale
   double precision :: movefrac
-  double precision :: add_sides_fix    
+  double precision :: add_sides_fix
   double precision :: precision
   double precision :: fbins
   double precision :: short_tol_dist
@@ -41,7 +41,7 @@ module input
 
   double precision, allocatable :: amass(:) ! (ntotat)
   double precision, allocatable :: charge(:) ! (ntotat)
-  
+
   logical :: writebad
   logical :: tinker
   logical :: pdb
@@ -60,7 +60,7 @@ module input
 
   logical, allocatable :: changechains(:) ! (ntype)
   logical, allocatable :: fixedoninput(:) ! (ntype)
-  
+
   character(len=200) :: xyzout
 
   character(len=1), allocatable :: chain(:) ! (ntype)

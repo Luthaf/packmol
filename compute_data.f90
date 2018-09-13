@@ -20,7 +20,7 @@ module compute_data
   integer, allocatable :: ibtype(:) ! (ntotat)
 
   double precision :: scale, scale2
-  double precision :: fdist, frest 
+  double precision :: fdist, frest
   double precision :: sizemin(3), sizemax(3)
   double precision :: boxl(3)
 
@@ -31,7 +31,7 @@ module compute_data
   double precision, allocatable :: radius(:), radius_ini(:), fscale(:) ! (ntotat)
   double precision, allocatable :: short_radius(:), short_radius_scale(:) ! ntotat
   double precision, allocatable :: gxcar(:,:) ! (ntotat,3)
-  
+
   double precision, allocatable :: fdist_atom(:), frest_atom(:) ! (ntotat)
   double precision, allocatable :: dmax(:) ! (ntype)
   double precision, allocatable :: cmxmin(:), cmymin(:), cmzmin(:) ! (ntype)
@@ -47,7 +47,7 @@ module compute_data
   integer, allocatable :: latomnext(:) ! (ntotat)
   integer, allocatable :: latomfirst(:,:,:) !  (0:nbp+1,0:nbp+1,0:nbp+1)
   integer, allocatable :: latomfix(:,:,:) ! (0:nbp+1,0:nbp+1,0:nbp+1)
- 
+
   ! For movebad
   double precision, allocatable :: fmol(:), radiuswork(:) ! (ntotat)
 
@@ -58,6 +58,6 @@ module compute_data
   ! For boxes with atoms linked lists
   integer :: lboxfirst
   integer, allocatable :: lboxnext(:) ! ((nbp+2)**3)
-  logical, allocatable :: hasfree(:,:,:) ! (0:nbp+1,0:nbp+1,0:nbp+1) 
+  logical, allocatable :: hasfree(:,:,:) ! (0:nbp+1,0:nbp+1,0:nbp+1)
 
 end module compute_data

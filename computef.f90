@@ -2,12 +2,12 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Subroutine that computes the function value
 !
-  
-subroutine computef(n,x,f) 
-      
+
+subroutine computef(n,x,f)
+
   use sizes
   use compute_data
   use input, only : fix
@@ -15,9 +15,9 @@ subroutine computef(n,x,f)
 
   integer :: n, i, j, k, ibox
   integer :: ilugan, ilubar, icart, itype, imol, iatom, idatom, &
-             iboxx, iboxy, iboxz 
+             iboxx, iboxy, iboxz
 
-  double precision :: v1(3), v2(3), v3(3) 
+  double precision :: v1(3), v2(3), v3(3)
   double precision :: x(n)
   double precision :: f,fparc,fplus
   double precision :: xtemp, ytemp, ztemp
@@ -26,7 +26,7 @@ subroutine computef(n,x,f)
 
   ! Reset function value
 
-  f = 0.d0 
+  f = 0.d0
   frest = 0.d0
   fdist = 0.d0
 
@@ -34,35 +34,35 @@ subroutine computef(n,x,f)
 
   if(.not.init1) call resetboxes()
 
-  ! Transform baricenter and angles into cartesian coordinates 
-  ! Computes cartesian coordinates from vector x and coor 
+  ! Transform baricenter and angles into cartesian coordinates
+  ! Computes cartesian coordinates from vector x and coor
 
-  ilubar = 0 
-  ilugan = ntotmol*3 
+  ilubar = 0
+  ilugan = ntotmol*3
   icart = 0
 
-  do itype = 1, ntype 
+  do itype = 1, ntype
     if(.not.comptype(itype)) then
       icart = icart + nmols(itype)*natoms(itype)
     else
-    do imol = 1, nmols(itype) 
+    do imol = 1, nmols(itype)
 
-      xbar = x(ilubar+1) 
-      ybar = x(ilubar+2) 
-      zbar = x(ilubar+3) 
-  
+      xbar = x(ilubar+1)
+      ybar = x(ilubar+2)
+      zbar = x(ilubar+3)
+
       ! Computing the rotation matrix
 
       beta = x(ilugan+1)
       gama = x(ilugan+2)
       teta = x(ilugan+3)
 
-      call eulerrmat(beta,gama,teta,v1,v2,v3)  
+      call eulerrmat(beta,gama,teta,v1,v2,v3)
 
       ! Looping over the atoms of this molecule
-  
+
       idatom = idfirst(itype) - 1
-      do iatom = 1, natoms(itype) 
+      do iatom = 1, natoms(itype)
 
         icart = icart + 1
         idatom = idatom + 1
@@ -84,9 +84,9 @@ subroutine computef(n,x,f)
 
         if(.not.init1) then
 
-          xtemp = xcart(icart,1) - sizemin(1) 
-          ytemp = xcart(icart,2) - sizemin(2) 
-          ztemp = xcart(icart,3) - sizemin(3) 
+          xtemp = xcart(icart,1) - sizemin(1)
+          ytemp = xcart(icart,2) - sizemin(2)
+          ztemp = xcart(icart,3) - sizemin(3)
 
           iboxx = int(xtemp/boxl(1)) + 1
           iboxy = int(ytemp/boxl(2)) + 1
@@ -94,7 +94,7 @@ subroutine computef(n,x,f)
 
           if(xtemp.le.0) iboxx = 1
           if(ytemp.le.0) iboxy = 1
-          if(ztemp.le.0) iboxz = 1 
+          if(ztemp.le.0) iboxz = 1
           if(iboxx.gt.nboxes(1)) iboxx = nboxes(1)
           if(iboxy.gt.nboxes(2)) iboxy = nboxes(2)
           if(iboxz.gt.nboxes(3)) iboxz = nboxes(3)
@@ -113,7 +113,7 @@ subroutine computef(n,x,f)
             lboxfirst = ibox
 
             ! Add boxes with fixed atoms which are vicinal to this box, and
-            ! are behind 
+            ! are behind
 
             if ( fix ) then
 
@@ -142,14 +142,14 @@ subroutine computef(n,x,f)
 
         end if
 
-      end do 
- 
-      ilugan = ilugan + 3 
-      ilubar = ilubar + 3 
+      end do
+
+      ilugan = ilugan + 3
+      ilubar = ilubar + 3
 
     end do
     end if
-  end do            
+  end do
 
   if(init1) return
 
@@ -217,4 +217,3 @@ subroutine add_box_behind(i,j,k)
   end if
 
 end subroutine add_box_behind
-

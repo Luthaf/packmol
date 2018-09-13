@@ -2,8 +2,8 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
-! Function that determines the length of a string (better than 
+!
+! Function that determines the length of a string (better than
 ! intrinsic "len" because considers tabs as empty characters)
 !
 function strlength(string)
@@ -12,14 +12,14 @@ function strlength(string)
   integer :: strlength
   character(len=200) :: string
   logical empty_char
-  
+
   strlength = 200
   do while(empty_char(string(strlength:strlength)))
     strlength = strlength - 1
     if ( strlength == 0 ) exit
   end do
 
-end function strlength      
+end function strlength
 
 !
 ! Function that determines if a character is empty (empty, space, or tab)
@@ -40,7 +40,7 @@ end function empty_char
 !
 ! Function that replaces all non-space empty characters by spaces
 !
- 
+
 function alltospace(record)
 
   implicit none
@@ -57,4 +57,3 @@ function alltospace(record)
   end do
 
 end function alltospace
-

@@ -2,11 +2,11 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Subroutine cenmass
 !
 !            Computes the center of mass of free molecules and
-!            for fixed molecules, if required. 
+!            for fixed molecules, if required.
 !
 subroutine cenmass()
 
@@ -40,7 +40,7 @@ subroutine cenmass()
       end do
     end if
   end do
-        
+
   do iline = 1, nlines
     if(keyword(iline,1).eq.'centerofmass'.or. &
        keyword(iline,1).eq.'center') then
@@ -55,33 +55,33 @@ subroutine cenmass()
 
   ! Computing the center of mass
 
-  do itype = 1, ntype 
-    do k = 1, 3 
-      cm(itype, k) = 0.d0 
-    end do 
-  end do 
- 
-  do itype = 1, ntype 
-    totm(itype) = 0.d0 
-    idatom = idfirst(itype) - 1
-    do iatom = 1, natoms(itype) 
-      idatom = idatom + 1
-      totm(itype) = totm(itype) + amass(idatom) 
-    end do 
-  end do 
- 
-  do itype = 1, ntype 
+  do itype = 1, ntype
+    do k = 1, 3
+      cm(itype, k) = 0.d0
+    end do
+  end do
+
+  do itype = 1, ntype
+    totm(itype) = 0.d0
     idatom = idfirst(itype) - 1
     do iatom = 1, natoms(itype)
-      idatom = idatom + 1 
-      do k = 1, 3 
-        cm(itype, k) = cm(itype, k)  + coor(idatom, k)*amass(idatom) 
-      end do 
-    end do 
-    do k = 1, 3 
-      cm(itype, k) = cm(itype, k) / totm(itype) 
-    end do 
-  end do  
+      idatom = idatom + 1
+      totm(itype) = totm(itype) + amass(idatom)
+    end do
+  end do
+
+  do itype = 1, ntype
+    idatom = idfirst(itype) - 1
+    do iatom = 1, natoms(itype)
+      idatom = idatom + 1
+      do k = 1, 3
+        cm(itype, k) = cm(itype, k)  + coor(idatom, k)*amass(idatom)
+      end do
+    end do
+    do k = 1, 3
+      cm(itype, k) = cm(itype, k) / totm(itype)
+    end do
+  end do
 
   ! Putting molecules in their center of mass
 

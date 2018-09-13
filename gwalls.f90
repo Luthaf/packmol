@@ -2,12 +2,12 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Gradient relative to restraints
 !
 
 subroutine gwalls(icart,irest)
-      
+
   use sizes
   use compute_data
 
@@ -40,12 +40,12 @@ subroutine gwalls(icart,irest)
     if(a2.gt.0.d0) gxcar(icart,2) = gxcar(icart,2) + scale * 2.d0 * a2
     if(a3.gt.0.d0) gxcar(icart,3) = gxcar(icart,3) + scale * 2.d0 * a3
   else if(ityperest(irest).eq.3) then
-    xmin = restpars(irest,1) 
-    ymin = restpars(irest,2) 
-    zmin = restpars(irest,3) 
-    xmax = restpars(irest,4) 
-    ymax = restpars(irest,5) 
-    zmax = restpars(irest,6) 
+    xmin = restpars(irest,1)
+    ymin = restpars(irest,2)
+    zmin = restpars(irest,3)
+    xmax = restpars(irest,4)
+    ymax = restpars(irest,5)
+    zmax = restpars(irest,6)
     a1 = xcart(icart,1) - xmin
     a2 = xcart(icart,2) - ymin
     a3 = xcart(icart,3) - zmin
@@ -80,7 +80,7 @@ subroutine gwalls(icart,irest)
     c2 = restpars(irest,6)**2
     d = a1**2/a2+b1**2/b2+c1**2/c2-restpars(irest,7)**2
     if(d.gt.0) then
-      gxcar(icart,1) = gxcar(icart,1) + scale2*4.d0*d*a1/a2 
+      gxcar(icart,1) = gxcar(icart,1) + scale2*4.d0*d*a1/a2
       gxcar(icart,2) = gxcar(icart,2) + scale2*4.d0*d*b1/b2
       gxcar(icart,3) = gxcar(icart,3) + scale2*4.d0*d*c1/c2
     end if
@@ -145,7 +145,7 @@ subroutine gwalls(icart,irest)
     d = a1**2/a2+b1**2/b2+c1**2/c2-restpars(irest,7)**2
     if(d.lt.0) then
       d = scale2 * d
-      gxcar(icart,1) = gxcar(icart,1) + 4.d0*d*a1/a2 
+      gxcar(icart,1) = gxcar(icart,1) + 4.d0*d*a1/a2
       gxcar(icart,2) = gxcar(icart,2) + 4.d0*d*b1/b2
       gxcar(icart,3) = gxcar(icart,3) + 4.d0*d*c1/c2
     end if
@@ -166,11 +166,11 @@ subroutine gwalls(icart,irest)
         restpars(irest,3)*xcart(icart,3) - &
         restpars(irest,4)
     if(d.gt.0.d0) then
-      d = scale * d 
+      d = scale * d
       gxcar(icart,1) = gxcar(icart,1) + 2.d0*restpars(irest,1)*d
       gxcar(icart,2) = gxcar(icart,2) + 2.d0*restpars(irest,2)*d
       gxcar(icart,3) = gxcar(icart,3) + 2.d0*restpars(irest,3)*d
-    end if 
+    end if
   else if(ityperest(irest).eq.12) then
     rg(1) = 0.0d0
     rg(2) = 0.0d0
@@ -230,7 +230,7 @@ subroutine gwalls(icart,irest)
     w = b1 + b2 + b3
     d = (a1 - vv1*w)**2 + (a2 - vv2*w)**2 + (a3 - vv3*w)**2
     frab = dmin1(-w , 0.d0)**2 * dmin1(w - restpars(irest,9), 0.d0)**2
-    frac = dmin1(-w , 0.d0)**2 * dmin1(d - restpars(irest,7)**2 , 0.d0 )**2 
+    frac = dmin1(-w , 0.d0)**2 * dmin1(d - restpars(irest,7)**2 , 0.d0 )**2
     frbc = dmin1(w - restpars(irest,9), 0.d0)**2 * &
            dmin1(d - restpars(irest,7)**2 , 0.d0 )**2
     dfra(1) = -2*dmin1(-w , 0.d0) * vv1
@@ -243,7 +243,7 @@ subroutine gwalls(icart,irest)
     dfrb(2) = 2*dmin1(w - restpars(irest,9), 0.d0) * vv2
     dfrc(2) = 2*dmin1(d - restpars(irest,7)**2 , 0.d0) * &
          (2*(a1 - vv1*w)*(-vv1*vv2)+  &
-          2*(a2 - vv2*w)*(1 - vv2**2)+ & 
+          2*(a2 - vv2*w)*(1 - vv2**2)+ &
           2*(a3 - vv3*w)*(-vv3*vv2) )
     dfra(3) = -2*dmin1(-w , 0.d0) * vv3
     dfrb(3) = 2*dmin1(w - restpars(irest,9), 0.d0) * vv3
@@ -258,7 +258,6 @@ subroutine gwalls(icart,irest)
     gxcar(icart,2) = gxcar(icart,2) + rg(2)
     gxcar(icart,3) = gxcar(icart,3) + rg(3)
   end if
-      
-  return 
-end subroutine gwalls
 
+  return
+end subroutine gwalls

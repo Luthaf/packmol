@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 !-----------------------------------------------------------------------------
 !
 ! http://www.ime.unicamp.br/~martinez/packmol
@@ -17,7 +17,7 @@
 ! PACKMOL: A package for building initial configurations for
 ! molecular dynamics simulations, J. Comp. Chem. 30:2157-2164, 2009.
 !
-! J. M. Martinez and L. Martinez, 
+! J. M. Martinez and L. Martinez,
 ! Packing optimization for the automated generation of complex
 ! system's initial configurations for molcular dynamics and
 ! docking. J. Comp. Chem. 24:819-825, 2003.
@@ -50,7 +50,7 @@ program packmol
   integer :: loop
   integer :: resntemp, nloop_tmp
   integer :: strlength, ioerr
-      
+
   double precision, allocatable :: x(:), xprint(:) ! (nn)
   double precision :: v1(3),v2(3),v3(3)
   double precision :: radscale, value
@@ -61,7 +61,7 @@ program packmol
   double precision, parameter :: pi=4.d0*datan(1.d0)
 
   real :: etime, tarray(2), time0
-  
+
   character(len=200) :: record, restart_from_temp, restart_to_temp
   character(len=80) :: xyzfile
   character(len=1) :: chain_tmp
@@ -76,7 +76,7 @@ program packmol
   ! Printing title
 
   call title()
-      
+
   ! Set dimensions of all arrays
 
   call setsizes()
@@ -96,9 +96,9 @@ program packmol
   ! Put molecules in their center of mass
 
   call cenmass()
- 
+
   ! Writting some input data
-     
+
   write(*,*) ' Total number of atoms: ', ntotat
 
   ! Put fixed molecules in the specified position
@@ -112,35 +112,35 @@ program packmol
       do itype = 1, ntype
         if(irestline(irest).gt.linestrut(itype,1).and.&
            irestline(irest).lt.linestrut(itype,2)) then
-          cmx = restpars(irest,1) 
+          cmx = restpars(irest,1)
           cmy = restpars(irest,2)
-          cmz = restpars(irest,3)    
-          beta = restpars(irest,4) 
-          gama = restpars(irest,5) 
-          teta = restpars(irest,6) 
+          cmz = restpars(irest,3)
+          beta = restpars(irest,4)
+          gama = restpars(irest,5)
+          teta = restpars(irest,6)
 
           ! Compute rotation matrix from euler angles
 
-          call eulerfixed(beta,gama,teta,v1,v2,v3)                 
+          call eulerfixed(beta,gama,teta,v1,v2,v3)
 
           idatom = idfirst(itype) - 1
           do iatom = 1, natoms(itype)
             idatom = idatom + 1
             xtemp =   coor(idatom,1)*v1(1) &
                     + coor(idatom,2)*v2(1) &
-                    + coor(idatom,3)*v3(1) 
+                    + coor(idatom,3)*v3(1)
             ytemp =   coor(idatom,1)*v1(2) &
                     + coor(idatom,2)*v2(2) &
-                    + coor(idatom,3)*v3(2) 
+                    + coor(idatom,3)*v3(2)
             ztemp =   coor(idatom,1)*v1(3) &
                     + coor(idatom,2)*v2(3) &
-                    + coor(idatom,3)*v3(3) 
+                    + coor(idatom,3)*v3(3)
             coor(idatom, 1) = xtemp + cmx
             coor(idatom, 2) = ytemp + cmy
-            coor(idatom, 3) = ztemp + cmz 
+            coor(idatom, 3) = ztemp + cmz
           end do
           record = name(itype)
-          write(*,*) ' Molecule ',record(1:strlength(record)),'(',itype,') will be fixed.' 
+          write(*,*) ' Molecule ',record(1:strlength(record)),'(',itype,') will be fixed.'
           fixed(itype) = .true.
           if(nmols(itype).gt.1) then
             write(*,*)' ERROR: Cannot set number > 1',' for fixed molecules. '
@@ -156,7 +156,7 @@ program packmol
         end if
       end do
     end if
-  end do 
+  end do
 
   ! Reseting parameters for removing the fixed molecules
   ! fix is the logical variable that informs that there are fixed molecules
@@ -178,9 +178,9 @@ program packmol
     end if
   end do
   ntfix = ntype
-  ntype = ntemp     
+  ntype = ntemp
 
-  do i = 1, ntfix - ntype 
+  do i = 1, ntfix - ntype
     do itype = 1, ntfix - 1
       if(fixed(itype)) then
         record = name(itype)
@@ -225,7 +225,7 @@ program packmol
           nloop_type(itype) = nloop_type(jtype)
           nloop_type(jtype) = nloop_tmp
           if(pdb) then
-            pdbfile(itype) = pdbfile(jtype) 
+            pdbfile(itype) = pdbfile(jtype)
             pdbfile(jtype) = xyzfile
           end if
           linestrut(itype,1) = linestrut(jtype,1)
@@ -248,15 +248,15 @@ program packmol
   do itype = 1, ntfix
     ntmol = ntmol + nmols(itype)
   end do
-  ntotmol = 0 
-  do itype = 1, ntype 
-    ntotmol = ntotmol + nmols(itype)       
-  end do     
+  ntotmol = 0
+  do itype = 1, ntype
+    ntotmol = ntotmol + nmols(itype)
+  end do
   n = ntotmol * 6
   write(*,*) ' Total number of molecules: ', ntmol
   write(*,*) ' Number of fixed molecules: ', ntmol - ntotmol
   write(*,*) ' Number of free molecules: ', ntotmol
-  write(*,*) ' Number of variables: ', n 
+  write(*,*) ' Number of variables: ', n
 
   ! Computing the total number of fixed atoms
 
@@ -265,7 +265,7 @@ program packmol
     do iftype = ntype + 1, ntfix
       natfix = natfix + natoms(iftype)
     end do
-  end if       
+  end if
   write(*,*) ' Total number of fixed atoms: ', natfix
 
   ! Setting the array that contains the restrictions per atom
@@ -274,8 +274,8 @@ program packmol
   do itype = 1, ntype
     rests = .false.
     do imol = 1, nmols(itype)
-      idatom = idfirst(itype) - 1      
-      do iatom = 1, natoms(itype) 
+      idatom = idfirst(itype) - 1
+      do iatom = 1, natoms(itype)
         icart = icart + 1
         idatom = idatom + 1
         nratom(icart) = 0
@@ -291,7 +291,7 @@ program packmol
             do iat = 2, maxkeywords
               read(keyword(iline,iat),*,iostat=ioerr) iiatom
               if ( ioerr /= 0 ) then
-                if ( iiatom == -1 ) then 
+                if ( iiatom == -1 ) then
                   write(*,*) ' ERROR: Could not read atom selection for type: ', itype
                   stop
                 else
@@ -327,7 +327,7 @@ program packmol
                   keyword(iline,1).eq.'outside'.or.&
                   keyword(iline,1).eq.'over'.or.&
                   keyword(iline,1).eq.'below') then
-            nratom(icart) = nratom(icart) + 1    
+            nratom(icart) = nratom(icart) + 1
             iratcount = iratcount + 1
             do irest = 1, nrest
               if(irestline(irest).eq.iline) iirest = irest
@@ -336,7 +336,7 @@ program packmol
           end if
         end do
         if(nratom(icart).gt.0) rests = .true.
-      end do 
+      end do
       if(.not.rests) then
         write(*,*) ' ERROR: Some molecule has no geometrical',&
                    ' restriction defined: nothing to do.'
@@ -369,7 +369,7 @@ program packmol
             read(keyword(iline,4),*) rot_bound(itype,3,2)
             rot_bound(itype,3,1) = rot_bound(itype,3,1)*pi/180.d0
             rot_bound(itype,3,2) = rot_bound(itype,3,2)*pi/180.d0
-  
+
             write(*,*) ' Rotations about x axis of molecules of ',&
                        ' type ', itype, ' will be constrained. '
           end if
@@ -403,7 +403,7 @@ program packmol
       end if
     end do
   end do
- 
+
   ! Setting the vector that contains the default tolerances
 
   do i = 1, ntotat
@@ -418,22 +418,22 @@ program packmol
     short_radius_scale(i) = short_tol_scale
   end do
 
-  ! Setting the radius defined for atoms of each molecule, 
+  ! Setting the radius defined for atoms of each molecule,
   ! but not atom-specific, first
 
   icart = 0
   do itype = 1, ntfix
     iline = linestrut(itype,1)
-    iline_atoms = 0 
+    iline_atoms = 0
     do while( iline <= linestrut(itype,2) )
       if ( keyword(iline,1) == "atoms" ) then
         iline_atoms = iline
         iline = iline + 1
         cycle
       end if
-      if ( keyword(iline,1) == "end" .and. &    
+      if ( keyword(iline,1) == "end" .and. &
            keyword(iline,2) == "atoms" ) then
-        iline_atoms = 0  
+        iline_atoms = 0
         iline = iline + 1
         cycle
       end if
@@ -474,7 +474,7 @@ program packmol
         end if
         !
         ! Read short_radius
-        !  
+        !
         if ( keyword(iline,1) == "short_radius" ) then
           read(keyword(iline,2),*,iostat=ioerr) value
           if ( ioerr /= 0 ) then
@@ -492,7 +492,7 @@ program packmol
         end if
         !
         ! Read short_radius scale
-        !  
+        !
         if ( keyword(iline,1) == "short_radius_scale" ) then
           read(keyword(iline,2),*,iostat=ioerr) value
           if ( ioerr /= 0 ) then
@@ -520,16 +520,16 @@ program packmol
   icart = 0
   do itype = 1, ntfix
     iline = linestrut(itype,1)
-    iline_atoms = 0 
+    iline_atoms = 0
     do while( iline <= linestrut(itype,2) )
       if ( keyword(iline,1) == "atoms" ) then
         iline_atoms = iline
         iline = iline + 1
         cycle
       end if
-      if ( keyword(iline,1) == "end" .and. &    
+      if ( keyword(iline,1) == "end" .and. &
            keyword(iline,2) == "atoms" ) then
-        iline_atoms = 0  
+        iline_atoms = 0
         iline = iline + 1
         cycle
       end if
@@ -646,7 +646,7 @@ program packmol
   ioerr = 0
   do i = 1, ntotat
     if ( use_short_radius(i) ) then
-     if ( short_radius(i) >= radius(i) ) then 
+     if ( short_radius(i) >= radius(i) ) then
        write(*,*) ' ERROR: The short radius must be smaller than the default radius. '
        write(*,*) '        (the default radius is one half of the default tolerance).'
        stop
@@ -666,7 +666,7 @@ program packmol
     write(*,dash1_line)
     stop
   end if
-  
+
   !
   ! (Re)setting parameters and building initial point
   !
@@ -687,7 +687,7 @@ program packmol
 
   if(check) then
     call output(n,x)
-    write(*,*) ' Wrote initial point to output file: ', xyzout(1:strlength(xyzout)) 
+    write(*,*) ' Wrote initial point to output file: ', xyzout(1:strlength(xyzout))
     stop
   end if
 
@@ -701,7 +701,7 @@ program packmol
   main : do while(itype <= ntype)
     itype = itype + 1
     if ( packall ) itype = ntype + 1
- 
+
     ! Use larger tolerance than required to improve separation
 
     radscale = discale
@@ -710,10 +710,10 @@ program packmol
     end do
 
     ! Set vectors for specific or all-molecule packing
-    
+
     if ( itype <= ntype ) then
       call swaptype(n,x,itype,1) ! Set vectors to pack only this type of molecule
-    else 
+    else
       call swaptype(n,x,itype,3) ! Restore all-molecule vectors
     end if
 
@@ -746,20 +746,20 @@ program packmol
       call writesuccess(itype,fdist,frest,fx)
 
     ! Otherwise, pack the molecules
-    
-    else 
+
+    else
 
       loop = -1
       gencanloop : do while(loop.lt.nloop)
         loop = loop + 1
 
         ! Reseting the parameters relative to the improvement of the function
-           
+
         if(loop.eq.0) then
           fimp = 1.d99
           fimprov = fimp
           do i = 1, ntotat
-            radiuswork(i) = radius(i) 
+            radiuswork(i) = radius(i)
             radius(i) = radius_ini(i)
           end do
           call computef(n,x,fx)
@@ -821,7 +821,7 @@ program packmol
         !
         ! Analysis of final loop packing and output data
         !
-        
+
         if ( itype <= ntype ) then
 
           ! Save best function value for this packing
@@ -830,7 +830,7 @@ program packmol
 
           ! Check if this point is a solution
 
-          call swaptype(n,x,itype,2) ! Save this type current point 
+          call swaptype(n,x,itype,2) ! Save this type current point
           ! If the solution was found for this type
           if( fdist < precision .and. frest < precision ) then
             call swaptype(n,x,itype,3) ! Restore all molecule vectors
@@ -886,7 +886,7 @@ program packmol
           call computef(n,x,fx)
         end if
 
-        ! Restore the working radii 
+        ! Restore the working radii
 
         do i = 1, ntotat
           radius(i) = radiuswork(i)
@@ -917,9 +917,8 @@ program packmol
 
   end do main
 
-  write(*,*) '  Running time: ', etime(tarray) - time0,' seconds. ' 
+  write(*,*) '  Running time: ', etime(tarray) - time0,' seconds. '
   write(*,dash3_line)
-  write(*,*) 
+  write(*,*)
 
 end program packmol
-

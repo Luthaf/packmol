@@ -2,17 +2,17 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 
 !
 ! Function that returns a real random number between 0. and 1.
-! 
+!
 
-double precision function rnd() 
-  
+double precision function rnd()
+
   call random_number(rnd)
 
-  return 
+  return
 end function rnd
 
 !
@@ -35,7 +35,7 @@ end subroutine init_random_number
 
 !
 ! Subroutine that uses the date to create a random seed
-! 
+!
 
 subroutine seed_from_time(seed)
 
@@ -47,4 +47,3 @@ subroutine seed_from_time(seed)
   seed = seed + value(1)+value(2)+value(3)+value(4)+value(5)/100+value(6)*100+value(7)/10+value(8)*10
 
 end subroutine seed_from_time
-

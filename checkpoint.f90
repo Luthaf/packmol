@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 
 !
 ! Subroutine that writes the last point obtained when
@@ -73,7 +73,7 @@ subroutine checkpoint(n,x)
     iprint2 = 0
     call pgencan(n,x,fx)
     movebadprint = .false.
-    call movebad(n,x,fx,movebadprint) 
+    call movebad(n,x,fx,movebadprint)
   end do
   init1 = .false.
 
@@ -94,19 +94,18 @@ subroutine checkpoint(n,x)
   write(*,*) ' The default nloop value is 50 for each molecule.'
   write(*,*)
 
-  write(*,hash1_line) 
+  write(*,hash1_line)
   write(*,*) ' ENDED WITHOUT PERFECT PACKING: '
   write(*,*) ' The output file:'
   write(*,*)
-  write(*,*) '   ',xyzout(1:strlength(xyzout)-7) 
+  write(*,*) '   ',xyzout(1:strlength(xyzout)-7)
   write(*,*)
   write(*,*) ' contains the best solution found. '
   write(*,*)
   write(*,*) ' Very likely, if the input data was correct, '
   write(*,*) ' it is a reasonable starting configuration.'
   write(*,*) ' Check commentaries above for more details. '
-  write(*,hash1_line) 
-      
+  write(*,hash1_line)
+
   return
 end subroutine checkpoint
-

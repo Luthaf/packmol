@@ -2,12 +2,12 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! subroutine tobar: moves molecules to their baricentres
 !
 
 subroutine tobar()
-      
+
   use sizes
   use compute_data, only : coor, ntype, natoms, idfirst
   implicit none
@@ -37,6 +37,5 @@ subroutine tobar()
     end do
   end do
 
-  return                                                 
+  return
 end subroutine tobar
-

@@ -2,12 +2,12 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! subroutine restmol: either compute the restraint function
 !                     value for a single molecule or solve
 !                     the problem of puting this molecule
 !                     in the restraint region
-!  
+!
 
 subroutine restmol(itype,ilubar,n,x,fx,solve)
 
@@ -19,7 +19,7 @@ subroutine restmol(itype,ilubar,n,x,fx,solve)
   integer :: n, nsafe, ntotsafe, itype, i, ilubar, nmoltype, ip1, ip2
   double precision :: x(n), fx
   logical :: solve, initsafe
- 
+
   ! Saving global problem variables
 
   nsafe = n
@@ -33,7 +33,7 @@ subroutine restmol(itype,ilubar,n,x,fx,solve)
   ! Preparing system to solve for this molecule
 
   n = 6
-  ntotmol = 1      
+  ntotmol = 1
   nmols(itype) = 1
   xmol(1) = x(ilubar+1)
   xmol(2) = x(ilubar+2)
@@ -49,7 +49,7 @@ subroutine restmol(itype,ilubar,n,x,fx,solve)
     end if
   end do
   init1 = .true.
-      
+
   ! If not going to solve the problem, compute energy and return
 
   if(.not.solve) then
@@ -63,19 +63,19 @@ subroutine restmol(itype,ilubar,n,x,fx,solve)
     call pgencan(n,xmol,fx)
     iprint1 = ip1
     iprint2 = ip2
-  end if       
+  end if
 
   ! Restoring original problem data
 
   ntotmol = ntotsafe
   n = nsafe
   nmols(itype) = nmoltype
-  x(ilubar+1) = xmol(1) 
-  x(ilubar+2) = xmol(2) 
-  x(ilubar+3) = xmol(3) 
-  x(ilubar+ntotmol*3+1) = xmol(4) 
-  x(ilubar+ntotmol*3+2) = xmol(5) 
-  x(ilubar+ntotmol*3+3) = xmol(6) 
+  x(ilubar+1) = xmol(1)
+  x(ilubar+2) = xmol(2)
+  x(ilubar+3) = xmol(3)
+  x(ilubar+ntotmol*3+1) = xmol(4)
+  x(ilubar+ntotmol*3+2) = xmol(5)
+  x(ilubar+ntotmol*3+3) = xmol(6)
   do i = 1, ntype
     comptype(i) = compsafe(i)
   end do
@@ -83,4 +83,3 @@ subroutine restmol(itype,ilubar,n,x,fx,solve)
 
   return
 end subroutine restmol
-

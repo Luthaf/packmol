@@ -139,11 +139,11 @@ subroutine getinp()
         cycle
       end if
       write(*,*) ' Will sum ', add_sides_fix,' to each side length on print'
-    else if(keyword(i,1).eq.'iprint1') then 
+    else if(keyword(i,1).eq.'iprint1') then
       read(keyword(i,2),*,iostat=ioerr) iprint1
       if ( ioerr /= 0 ) exit
       write(*,*) ' Optional printvalue 1 set: ', iprint1
-    else if(keyword(i,1).eq.'iprint2') then 
+    else if(keyword(i,1).eq.'iprint2') then
       read(keyword(i,2),*,iostat=ioerr) iprint2
       if ( ioerr /= 0 ) exit
       write(*,*) ' Optional printvalue 2 set: ', iprint2
@@ -220,7 +220,7 @@ subroutine getinp()
   do iline = 1, nlines
     if(keyword(iline,1).eq.'structure') then
       itype = itype + 1
-     
+
       record = keyword(iline,2)
       write(*,*) ' Reading coordinate file: ', record(1:strlength(record))
 
@@ -248,7 +248,7 @@ subroutine getinp()
             read(record,"( t31,f8.3,t39,f8.3,t47,f8.3 )",iostat=ioerr) &
                  (coor(idatom,k),k=1,3)
             if( ioerr /= 0 ) then
-              record = keyword(iline,2) 
+              record = keyword(iline,2)
               write(*,*) ' ERROR: Failed to read coordinates from', &
                          ' file: ', record(1:strlength(record))
               write(*,*) ' Probably the coordinates are not in', &
@@ -259,7 +259,7 @@ subroutine getinp()
               stop
             end if
 
-            ! This only tests if residue numbers can be read, they are used 
+            ! This only tests if residue numbers can be read, they are used
             ! only for  output
 
             read(record(23:26),*,iostat=ioerr) itest
@@ -275,7 +275,7 @@ subroutine getinp()
                          ' can be found at: '
               write(*,*) ' www.rcsb.org/pdb '
               stop
-            end if   
+            end if
           end if
           read(10,"( a200 )",iostat=ioerr) record
           if ( ioerr /= 0 ) exit
@@ -362,7 +362,7 @@ subroutine getinp()
               if ( i > 200 ) exit
             end do
           end if
-          read(record(iarg:i-1),*) ele(idatom)    
+          read(record(iarg:i-1),*) ele(idatom)
           read(record(i:200),*) (coor(idatom,k), k = 1, 3),&
                (nconnect(idatom, k), k = 1, maxcon(idatom))
           amass(idatom) = 1.d0
@@ -392,9 +392,9 @@ subroutine getinp()
         end do
         close(10)
       end if
-      
+
       ! Reading moldy input files
-  
+
       if(moldy) then
         open(10,file=keyword(iline,2), status ='old',iostat=ioerr)
         if ( ioerr /= 0 ) call failopen(keyword(iline,2))
@@ -403,7 +403,7 @@ subroutine getinp()
         do while(.true.)
           read(10,"( a200 )",iostat=ioerr) record
           if ( ioerr /= 0 ) exit
-          if(record.gt.' '.and.record(1:3).ne.'end') & 
+          if(record.gt.' '.and.record(1:3).ne.'end') &
             natoms(itype) = natoms(itype) + 1
         end do
         close(10)
@@ -436,7 +436,7 @@ subroutine getinp()
                '(',natoms(itype),' atoms)'
   end do
 
-  ! Setting the vectors for the number of GENCAN loops 
+  ! Setting the vectors for the number of GENCAN loops
 
   if(nloop.eq.0) then
     nloop_all = 200*ntype
@@ -454,7 +454,7 @@ subroutine getinp()
   end do
 
   ! nloop0 are the number of loops for the initial phase packing
-      
+
   if(nloop0.eq.0) then
     nloop0 = 20*ntype
   else
@@ -467,7 +467,7 @@ subroutine getinp()
       write(*,*) ' Maximum number of GENCAN loops-0 for type: ', itype, ': ', nloop0_type(itype)
     end if
   end do
-      
+
   ! Reading the restrictions that were set
 
   irest = 0
@@ -485,7 +485,7 @@ subroutine getinp()
       read(keyword(iline,6),*,iostat=ioerr) restpars(irest,5)
       read(keyword(iline,7),*,iostat=ioerr) restpars(irest,6)
     end if
-  
+
     if(keyword(iline,1).eq.'inside') then
       irest = irest + 1
       irestline(irest) = iline
@@ -520,14 +520,14 @@ subroutine getinp()
         read(keyword(iline,9),*,iostat=ioerr) restpars(irest,7)
       else if(keyword(iline,2).eq.'cylinder') then
         ityperest(irest) = 12
-        read(keyword(iline,3),*,iostat=ioerr) restpars(irest,1) 
+        read(keyword(iline,3),*,iostat=ioerr) restpars(irest,1)
         read(keyword(iline,4),*,iostat=ioerr) restpars(irest,2)
         read(keyword(iline,5),*,iostat=ioerr) restpars(irest,3)
         read(keyword(iline,6),*,iostat=ioerr) restpars(irest,4)
         read(keyword(iline,7),*,iostat=ioerr) restpars(irest,5)
         read(keyword(iline,8),*,iostat=ioerr) restpars(irest,6)
-        read(keyword(iline,9),*,iostat=ioerr) restpars(irest,7)  
-        read(keyword(iline,10),*,iostat=ioerr) restpars(irest,9)  
+        read(keyword(iline,9),*,iostat=ioerr) restpars(irest,7)
+        read(keyword(iline,10),*,iostat=ioerr) restpars(irest,9)
         restpars(irest,8) = restpars(irest,4)**2 + &
                             restpars(irest,5)**2 + &
                             restpars(irest,6)**2
@@ -540,7 +540,7 @@ subroutine getinp()
           restpars(irest,4) = restpars(irest,4) / clen
           restpars(irest,5) = restpars(irest,5) / clen
           restpars(irest,6) = restpars(irest,6) / clen
-        end if                                     
+        end if
       else
         ioerr = 1
       end if
@@ -580,7 +580,7 @@ subroutine getinp()
         read(keyword(iline,9),*,iostat=ioerr) restpars(irest,7)
       else if(keyword(iline,2).eq.'cylinder') then
         ityperest(irest) = 13
-        read(keyword(iline,3),*,iostat=ioerr) restpars(irest,1) 
+        read(keyword(iline,3),*,iostat=ioerr) restpars(irest,1)
         read(keyword(iline,4),*,iostat=ioerr) restpars(irest,2)
         read(keyword(iline,5),*,iostat=ioerr) restpars(irest,3)
         read(keyword(iline,6),*,iostat=ioerr) restpars(irest,4)
@@ -600,7 +600,7 @@ subroutine getinp()
           restpars(irest,4) = restpars(irest,4) / clen
           restpars(irest,5) = restpars(irest,5) / clen
           restpars(irest,6) = restpars(irest,6) / clen
-        end if                                     
+        end if
       else
         ioerr = 1
       end if
@@ -625,7 +625,7 @@ subroutine getinp()
       read(keyword(iline,4),*,iostat=ioerr) restpars(irest,2)
       read(keyword(iline,5),*,iostat=ioerr) restpars(irest,3)
       read(keyword(iline,6),*,iostat=ioerr) restpars(irest,4)
-      if(keyword(iline,2).ne.'plane') ioerr = 1 
+      if(keyword(iline,2).ne.'plane') ioerr = 1
     end if
 
     if ( ioerr /= 0 ) then
@@ -634,7 +634,7 @@ subroutine getinp()
     end if
 
   end do
-  nrest = irest 
+  nrest = irest
   write(*,*) ' Total number of restrictions: ', nrest
 
   ! Getting the tolerance
@@ -669,7 +669,7 @@ subroutine getinp()
         write(*,*) ' ERROR: Failed reading short_tol_dist. '
         stop
       end if
-      if ( short_tol_dist > dism ) then 
+      if ( short_tol_dist > dism ) then
         write(*,*) ' ERROR: The short_tol_dist parameter must be smaller than the tolerance. '
         stop
       end if
@@ -687,7 +687,7 @@ subroutine getinp()
         write(*,*) ' ERROR: Failed reading short_tol_scale. '
         stop
       end if
-      if ( short_tol_dist <= 0.d0 ) then 
+      if ( short_tol_dist <= 0.d0 ) then
         write(*,*) ' ERROR: The short_tol_scale parameter must be positive. '
         stop
       end if
@@ -716,14 +716,14 @@ subroutine getinp()
         end if
         iline = iline + 1
       end do
-      linestrut(itype,2) = iline 
+      linestrut(itype,2) = iline
     end if
   end do
 
   ! If pdb files, get the type of residue numbering output for each
   ! molecule
 
-  if(pdb) then             
+  if(pdb) then
     do itype = 1, ntype
       resnumbers(itype) = -1
       changechains(itype) = .false.
@@ -747,12 +747,12 @@ subroutine getinp()
                    ' set for structure ',itype
         call setrnum(pdbfile(itype),imark)
         if(imark.eq.1) resnumbers(itype) = 0
-        if(imark.gt.1) resnumbers(itype) = 1 
+        if(imark.gt.1) resnumbers(itype) = 1
       end if
       write(*,*) ' Residue numbering set for structure ',itype,':',&
                  resnumbers(itype)
       write(*,*) ' Swap chains of molecules of structure ',&
-                 itype,':', changechains(itype) 
+                 itype,':', changechains(itype)
       if ( chain(itype) /= "#" ) then
         write(*,*) ' Specific chain identifier set for structure ',itype,':',chain(itype)
       end if
@@ -764,7 +764,7 @@ subroutine getinp()
     end do
   end if
 
-  ! Write the number of molecules of each type 
+  ! Write the number of molecules of each type
 
   do itype = 1, ntype
     write(*,*) ' Number of molecules of type ', itype, ': ', nmols(itype)
@@ -817,7 +817,7 @@ subroutine getinp()
       end if
     end if
   end do lines
- 
+
   return
 end subroutine getinp
 
@@ -827,14 +827,14 @@ end subroutine getinp
 
 subroutine failopen(record)
   character(len=200) :: record
-  write(*,*) 
+  write(*,*)
   write(*,*) ' ERROR: Could not open file. '
   write(*,*) '        Could not find file: ',trim(record)
-  write(*,*) '        Please check if all the input and structure ' 
-  write(*,*) '        files are in the current directory or if the' 
+  write(*,*) '        Please check if all the input and structure '
+  write(*,*) '        files are in the current directory or if the'
   write(*,*) '        correct paths are provided.'
-  write(*,*) 
-  stop 
+  write(*,*)
+  stop
 end subroutine failopen
 
 !
@@ -877,7 +877,7 @@ end subroutine setrnum
 !
 !  Subroutine that computes de number of connections of each atom
 !  for tinker xyz files
-! 
+!
 
 subroutine setcon(xyzfile,idfirst)
 
@@ -886,7 +886,7 @@ subroutine setcon(xyzfile,idfirst)
   implicit none
 
   integer :: idfirst
-  integer :: natoms, idatom, iatom, ic, i 
+  integer :: natoms, idatom, iatom, ic, i
   character(len=64) :: xyzfile
   character(len=120) :: record
 
@@ -925,7 +925,7 @@ subroutine getkeywords()
   do i = 1, nlines
     do j = 1, maxkeywords
       keyword(i,j) = 'none'
-    end do            
+    end do
   end do
 
   ! Filling keyword array
@@ -1004,14 +1004,13 @@ end subroutine chainc
 ! Subroutine that clears a character variable
 
 subroutine clear(record)
-      
+
   integer :: i
   character(len=80) :: record
 
   do i = 1, 80
     record(i:i) = ' '
   end do
-      
+
   return
 end subroutine clear
-

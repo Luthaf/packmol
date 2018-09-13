@@ -101,6 +101,4 @@
 30000   CONTINUE
 !
 RETURN
-END subroutine jacobi        
-
- 
+END subroutine jacobi

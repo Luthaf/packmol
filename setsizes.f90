@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Subroutine that sets the sizes of all allocatable arrays
 !
 
@@ -13,7 +13,7 @@ subroutine setsizes()
   use input
   use usegencan
   use flashsort
- 
+
   implicit none
   integer :: i, ival, ilast, iline, itype
   integer :: ioerr
@@ -27,10 +27,10 @@ subroutine setsizes()
   write(*,*)
   write(*,*) ' Userguide at: www.ime.unicamp.br/~martinez/packmol '
   write(*,*)
-      
+
   ! Getting input lines from the input file
 
-  write(*,*) ' Reading input file... (Control-C aborts)'   
+  write(*,*) ' Reading input file... (Control-C aborts)'
 
   do i = 1, 200
     blank(i:i) = ' '
@@ -50,7 +50,7 @@ subroutine setsizes()
     ! Remove comments
 
     i = 0
-    do while( i < 200 ) 
+    do while( i < 200 )
       i = i + 1
       if ( record(i:i) == '#' ) exit
     end do
@@ -61,7 +61,7 @@ subroutine setsizes()
       cycle
     end if
     if ( strlength(record) < 1 ) cycle
-      
+
     ! Number of lines of the input file
 
     nlines = nlines + 1
@@ -80,7 +80,7 @@ subroutine setsizes()
         ival = ival + 1
         maxkeywords = max(maxkeywords,ival)
       end if
-    end do  
+    end do
   end do
   rewind(5)
 
@@ -100,7 +100,7 @@ subroutine setsizes()
     ! Remove comments
 
     i = 0
-    do while( i < 200 ) 
+    do while( i < 200 )
       i = i + 1
       if ( record(i:i) == '#' ) exit
     end do
@@ -147,7 +147,7 @@ subroutine setsizes()
     pdb = .true.
     write(*,*)
     write(*,*)' WARNING: File type not (correctly?) specified, using PDB'
-  end if  
+  end if
 
   ! Getting the number of different types of molecules
 
@@ -158,7 +158,7 @@ subroutine setsizes()
       if ( keyword(iline,2) == "none" ) then
         write(*,*) ' ERROR: structure without filename. '
         write(*,*) ' The syntax must be, for example: structure water.pdb '
-        stop 
+        stop
       end if
     end if
   end do
@@ -225,13 +225,13 @@ subroutine setsizes()
     if ( keyword(iline,1) == "end" .and. &
          keyword(iline,2) == "structure" ) inside_structure = .false.
 
-    ! Read number of molecules for each type 
+    ! Read number of molecules for each type
 
     if ( keyword(iline,1) == "number" ) then
       read(keyword(iline,2),*,iostat=ioerr) nmols(itype)
       if ( ioerr /= 0 ) then
         write(*,*) ' ERROR: Error reading number of molecules of type ', itype
-        stop  
+        stop
       end if
       if ( nmols(itype) < 1 ) then
         write(*,*) ' ERROR: Number of molecules of type ', itype, ' set to less than 1 '
@@ -246,14 +246,14 @@ subroutine setsizes()
         read(keyword(iline,2),*,iostat=ioerr) nloop_type(itype)
         if ( ioerr /= 0 ) then
           write(*,*) ' ERROR: Error reading number of loops of type ', itype
-          stop  
+          stop
         end if
         if ( nloop_type(itype) < 1 ) then
           write(*,*) ' ERROR: Number of loops of type ', itype, ' set to less than 1 '
           stop
         end if
       end if
-    end if 
+    end if
 
     ! Read the (optional) number of gencan loops for initial setup for this molecule
 
@@ -262,21 +262,21 @@ subroutine setsizes()
         read(keyword(iline,2),*,iostat=ioerr) nloop0_type(itype)
         if ( ioerr /= 0 ) then
           write(*,*) ' ERROR: Error reading number of loops-0 of type ', itype
-          stop  
+          stop
         end if
         if ( nloop0_type(itype) < 1 ) then
           write(*,*) ' ERROR: Number of loops-0 of type ', itype, ' set to less than 1 '
           stop
         end if
       end if
-    end if 
+    end if
 
   end do
   do itype = 1, ntype
-    if ( nmols(itype) == 0 ) then  
+    if ( nmols(itype) == 0 ) then
       write(*,*) ' Warning: Number of molecules not set for type '&
                  ,itype,': assuming 1 '
-      nmols(itype) = 1 
+      nmols(itype) = 1
     end if
   end do
 
@@ -314,7 +314,7 @@ subroutine setsizes()
          keyword(iline,1) == 'over' .or. &
          keyword(iline,1) == 'below' .or. &
          keyword(iline,1) == 'constrain_rotation' ) then
-      i = i + 1 
+      i = i + 1
     end if
   end do
   maxrest = i
@@ -352,4 +352,3 @@ subroutine setsizes()
   allocate(l(nn),u(nn),wd(8*nn),wi(nn),g(nn))
 
 end subroutine setsizes
-

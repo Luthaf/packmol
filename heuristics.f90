@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! subroutine movebad: Move the worse molecules to new positions
 !
 
@@ -23,7 +23,7 @@ subroutine movebad(n,x,fx,movebadprint)
   double precision :: fdist_mol, frest_mol
   logical :: movebadprint, hasbad
 
-  if(movebadprint) write(*,*) ' Moving worst molecules ... ' 
+  if(movebadprint) write(*,*) ' Moving worst molecules ... '
 
   icart = 0
   do itype = 1, ntype
@@ -51,7 +51,7 @@ subroutine movebad(n,x,fx,movebadprint)
 
   ! Moving the worst molecules
 
-  hasbad = .false. 
+  hasbad = .false.
   icart = 0
   do itype = 1, ntype
     if(.not.comptype(itype)) then
@@ -60,7 +60,7 @@ subroutine movebad(n,x,fx,movebadprint)
 
       ! Checking the function value for each molecule
 
-      nbad = 0                                             
+      nbad = 0
       do imol = 1, nmols(itype)
         fdist_mol = 0.d0
         frest_mol = 0.d0
@@ -70,7 +70,7 @@ subroutine movebad(n,x,fx,movebadprint)
           frest_mol = dmax1(frest_mol,frest_atom(icart))
         end do
         if(fdist_mol > precision .or. &
-           frest_mol > precision ) then 
+           frest_mol > precision ) then
           hasbad = .true.
           nbad = nbad + 1
           fmol(imol) = fdist_mol + frest_mol
@@ -90,7 +90,7 @@ subroutine movebad(n,x,fx,movebadprint)
         ! Ordering molecules from best to worst
 
         mflash = 1 + nmols(itype)/10
-        call flash1(fmol,nmols(itype),lflash,mflash,indflash)   
+        call flash1(fmol,nmols(itype),lflash,mflash,indflash)
 
         ! Moving molecules
 
@@ -105,13 +105,13 @@ subroutine movebad(n,x,fx,movebadprint)
         end if
         imol = 0
         do i = 1, itype - 1
-          if(comptype(i)) imol = imol + nmols(i) 
+          if(comptype(i)) imol = imol + nmols(i)
         end do
         write(*,prog2_line)
-        write(*,"( '          |',$)") 
+        write(*,"( '          |',$)")
         j = 0
         do i = 1, nmove
-          ibad = nmols(itype) - i + 1 
+          ibad = nmols(itype) - i + 1
           igood = int(rnd()*nmols(itype)*frac) + 1
           ilubar = 3*(indflash(ibad)+imol-1)
           ilugan = 3*(indflash(ibad)+imol-1)+3*ntotmol
@@ -119,10 +119,10 @@ subroutine movebad(n,x,fx,movebadprint)
           ilugan2 = 3*(indflash(igood)+imol-1)+3*ntotmol
           if ( movebadrandom ) then
             x(ilubar+1) = sizemin(1) + rnd()*(sizemax(1)-sizemin(1))
-            x(ilubar+2) = sizemin(2) + rnd()*(sizemax(2)-sizemin(2)) 
-            x(ilubar+3) = sizemin(3) + rnd()*(sizemax(3)-sizemin(3)) 
+            x(ilubar+2) = sizemin(2) + rnd()*(sizemax(2)-sizemin(2))
+            x(ilubar+3) = sizemin(3) + rnd()*(sizemax(3)-sizemin(3))
           else
-            x(ilubar+1) = x(ilubar2+1) - 0.3*dmax(itype)+0.6*rnd()*dmax(itype) 
+            x(ilubar+1) = x(ilubar2+1) - 0.3*dmax(itype)+0.6*rnd()*dmax(itype)
             x(ilubar+2) = x(ilubar2+2) - 0.3*dmax(itype)+0.6*rnd()*dmax(itype)
             x(ilubar+3) = x(ilubar2+3) - 0.3*dmax(itype)+0.6*rnd()*dmax(itype)
           end if
@@ -130,11 +130,11 @@ subroutine movebad(n,x,fx,movebadprint)
           x(ilugan+2) = x(ilugan2+2)
           x(ilugan+3) = x(ilugan2+3)
           call restmol(itype,ilubar,n,x,fx,.true.)
-          do while( j <= 65.d0*i/nmove ) 
+          do while( j <= 65.d0*i/nmove )
             write(*,"('*',$)")
             j = j + 1
           end do
-        end do             
+        end do
         write(*,"('|')")
       end if
     end if
@@ -148,4 +148,3 @@ subroutine movebad(n,x,fx,movebadprint)
 
   return
 end subroutine movebad
-

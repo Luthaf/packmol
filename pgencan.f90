@@ -2,7 +2,7 @@
 !  Written by Ernesto G. Birgin, 2009-2011.
 !  Copyright (c) 2009-2018, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Subroutine pgencan: This is only a interface to set some
 !                     parameters. What might be important here
 !                     is the setup of the constraint_axis constraint.
@@ -10,7 +10,7 @@
 
 subroutine pgencan(n,x,fx)
 
-  use sizes 
+  use sizes
   use compute_data
   use usegencan
   implicit none
@@ -91,7 +91,7 @@ function packmolprecision(n,x)
   call computef(n,x,f)
 
   packmolprecision = .false.
-  if ( fdist < precision .and. frest < precision ) then 
+  if ( fdist < precision .and. frest < precision ) then
     packmolprecision = .true.
   end if
 

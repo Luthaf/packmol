@@ -2,10 +2,10 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Subroutine writesuccess
 !
-!    Writes the success messages for good packings    
+!    Writes the success messages for good packings
 !
 
 subroutine writesuccess(itype,fdist,frest,f)
@@ -43,4 +43,3 @@ subroutine writesuccess(itype,fdist,frest,f)
   end if
 
 end subroutine writesuccess
-

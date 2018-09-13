@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Subroutine initial: Subroutine that reset parameters and
 !                     builds the initial point
 !
@@ -25,8 +25,8 @@ subroutine initial(n,x)
                       cmz, fx, xlength, dbox, rnd, &
                       radmax, v1(3), v2(3), v3(3), xbar, ybar, zbar
   double precision, parameter :: twopi = 8.d0*datan(1.d0)
-     
-  logical :: overlap, movebadprint, hasbad 
+
+  logical :: overlap, movebadprint, hasbad
   logical, allocatable :: hasfixed(:,:,:)
 
   character(len=200) :: record
@@ -55,7 +55,7 @@ subroutine initial(n,x)
   scale = 1.d0
   scale2 = 1.d-2
 
-  ! Move molecules to their center of mass (not for moldy)                                                                                   
+  ! Move molecules to their center of mass (not for moldy)
   if(.not.moldy) call tobar()
 
   ! Compute maximum internal distance within each type of molecule
@@ -92,7 +92,7 @@ subroutine initial(n,x)
     x(i+ntotmol*3) = 0.d0
   end do
   call restmol(1,0,n,x,fx,.true.)
-  sizemin(1) = x(1) - sidemax 
+  sizemin(1) = x(1) - sidemax
   sizemax(1) = x(1) + sidemax
   sizemin(2) = x(2) - sidemax
   sizemax(2) = x(2) + sidemax
@@ -184,7 +184,7 @@ subroutine initial(n,x)
   end do
 
   ! Performing some steps of optimization for the restrictions only
-  
+
   write(*,hash3_line)
   write(*,"('  Building initial approximation ... ' )")
   write(*,hash3_line)
@@ -208,17 +208,17 @@ subroutine initial(n,x)
     hasbad = .true.
     call computef(n,x,fx)
     do while( frest > precision .and. i.le. nloop0_type(itype)-1 .and. hasbad)
-      i = i + 1 
+      i = i + 1
       write(*,prog1_line)
       call pgencan(n,x,fx)
       call computef(n,x,fx)
-      if(frest > precision) then 
+      if(frest > precision) then
         write(*,"( a,i6,a,i6 )")'  Fixing bad orientations ... ', i,' of ', nloop0_type(itype)
         movebadprint = .true.
-        call movebad(n,x,fx,movebadprint) 
+        call movebad(n,x,fx,movebadprint)
       end if
     end do
-    write(*,*) 
+    write(*,*)
     write(*,*) ' Restraint-only function value: ', fx
     write(*,*) ' Maximum violation of the restraints: ', frest
     call swaptype(n,x,itype,2) ! Save current type results
@@ -231,11 +231,11 @@ subroutine initial(n,x)
       write(*,*) '        the constraints, since it seems that'
       write(*,*) '        the molecules cannot satisfy them at'
       write(*,*) '        at all. '
-      write(*,*) '        Please check the spatial constraints and' 
+      write(*,*) '        Please check the spatial constraints and'
       write(*,*) '        try again.'
       if ( i .ge. nloop0_type(itype)-1 ) then
       end if
-        write(*,*) ' >The maximum number of cycles (',nloop0_type(itype),') was achieved.' 
+        write(*,*) ' >The maximum number of cycles (',nloop0_type(itype),') was achieved.'
         write(*,*) '  You may try increasing it with the',' nloop0 keyword, as in: nloop0 1000 '
       stop
     end if
@@ -249,12 +249,12 @@ subroutine initial(n,x)
   do i = 1, 3
     sizemin(i) = 1.d20
     sizemax(i) = -1.d20
-  end do                       
+  end do
 
   icart = 0
   do itype = 1, ntfix
     do imol = 1, nmols(itype)
-      do iatom = 1, natoms(itype) 
+      do iatom = 1, natoms(itype)
         icart = icart + 1
         sizemin(1) = dmin1(sizemin(1),xcart(icart,1))
         sizemin(2) = dmin1(sizemin(2),xcart(icart,2))
@@ -262,17 +262,17 @@ subroutine initial(n,x)
         sizemax(1) = dmax1(sizemax(1),xcart(icart,1))
         sizemax(2) = dmax1(sizemax(2),xcart(icart,2))
         sizemax(3) = dmax1(sizemax(3),xcart(icart,3))
-      end do 
+      end do
     end do
-  end do             
+  end do
 
   ! Computing the size of the patches
 
   write(*,*) ' Computing size of patches... '
-  dbox = discale * radmax + 0.01d0 * radmax 
+  dbox = discale * radmax + 0.01d0 * radmax
   do i = 1, 3
     xlength = sizemax(i) - sizemin(i)
-    nb = int(xlength/dbox + 1.d0)  
+    nb = int(xlength/dbox + 1.d0)
     if(nb.gt.nbp) nb = nbp
     boxl(i) = dmax1(xlength/dfloat(nb),dbox)
     nboxes(i) = nb
@@ -290,8 +290,8 @@ subroutine initial(n,x)
         hasfree(i,j,k) = .false.
       end do
     end do
-  end do   
- 
+  end do
+
   ! If there are fixed molecules, add them permanently to the latomfix array
 
   write(*,*) ' Add fixed molecules to permanent arrays... '
@@ -372,15 +372,15 @@ subroutine initial(n,x)
     return
   end if
 
-  ! Building random initial point 
+  ! Building random initial point
 
   write(*,dash3_line)
   write(*,*) ' Setting initial trial coordinates ... '
   write(*,dash2_line)
 
-  if ( chkgrad ) then 
+  if ( chkgrad ) then
      write(*,*) ' For checking gradient, will set avoidoverlap to false. '
-     avoidoverlap = .false. 
+     avoidoverlap = .false.
   end if
 
   ! Setting random center of mass coordinates, within size limits
@@ -395,7 +395,7 @@ subroutine initial(n,x)
       if ( .not. avoidoverlap ) then
         fx = 1.d0
         ntry = 0
-        do while((fx.gt.precision).and.ntry.le.20) 
+        do while((fx.gt.precision).and.ntry.le.20)
           ntry = ntry + 1
           x(ilubar+1) = cmxmin(itype) + rnd()*(cmxmax(itype)-cmxmin(itype))
           x(ilubar+2) = cmymin(itype) + rnd()*(cmymax(itype)-cmymin(itype))
@@ -406,7 +406,7 @@ subroutine initial(n,x)
         fx = 1.d0
         ntry = 0
         overlap = .false.
-        do while((overlap.or.fx.gt.precision).and.ntry.le.20) 
+        do while((overlap.or.fx.gt.precision).and.ntry.le.20)
           ntry = ntry + 1
           x(ilubar+1) = cmxmin(itype) + rnd()*(cmxmax(itype)-cmxmin(itype))
           x(ilubar+2) = cmymin(itype) + rnd()*(cmymax(itype)-cmymin(itype))
@@ -445,7 +445,7 @@ subroutine initial(n,x)
             else
               overlap = .false.
             end if
-          end if  
+          end if
           if(.not.overlap) call restmol(itype,ilubar,n,x,fx,.false.)
         end do
       end if
@@ -490,7 +490,7 @@ subroutine initial(n,x)
     dbox = discale * radmax + 0.01d0 * radmax
     do i = 1, 3
       xlength = sizemax(i) - sizemin(i)
-      nb = int(xlength/dbox + 1.d0)  
+      nb = int(xlength/dbox + 1.d0)
       if(nb.gt.nbp) nb = nbp
       boxl(i) = dmax1(xlength/dfloat(nb),dbox)
       nboxes(i) = nb
@@ -533,7 +533,7 @@ subroutine initial(n,x)
       call computef(n,x,fx)
       write(*,*) ' Maximum violation of the restraints: ', frest
       write(*,*) ' Maximum violation of minimum atom distances: ', fdist
-      call swaptype(n,x,itype,3) ! Restore all-molecule arrays 
+      call swaptype(n,x,itype,3) ! Restore all-molecule arrays
     else
       ilubar = ilubar + nmols(itype)*3
       ilugan = ilugan + nmols(itype)*3
@@ -543,7 +543,7 @@ subroutine initial(n,x)
   ! Return with current random point (not default)
 
   if(randini) return
- 
+
   ! Adjusting current point to fit the constraints
 
   init1 = .true.
@@ -564,7 +564,7 @@ subroutine initial(n,x)
     call computef(n,x,fx)
     hasbad = .true.
     do while( frest > precision .and. i <= nloop0_type(itype)-1 .and. hasbad)
-      i = i + 1 
+      i = i + 1
       write(*,prog1_line)
       call pgencan(n,x,fx)
       call computef(n,x,fx)
@@ -587,4 +587,3 @@ subroutine initial(n,x)
 
   return
 end subroutine initial
-

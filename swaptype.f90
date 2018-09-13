@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 !  Subroutine that swaps indexes for packing molecules one at a time
 !
 
@@ -45,7 +45,7 @@ subroutine swaptype(n,x,itype,action)
       ilubar = ilubar + nmols(i) * 3
     end do
     ilubar = ilubar + 1
-    ilugan = ntemp/2 + ilubar 
+    ilugan = ntemp/2 + ilubar
     do i = 1, n / 2
       x(i) = xfull(ilubar)
       x(i+n/2) = xfull(ilugan)
@@ -74,7 +74,7 @@ subroutine swaptype(n,x,itype,action)
   ! Restore all-molecule vectors
 
   if ( action == 3 ) then
-    n = ntemp 
+    n = ntemp
     ntotmol = ntottemp
     nloop = nloop_all
     do i = 1, n
@@ -86,4 +86,3 @@ subroutine swaptype(n,x,itype,action)
   end if
 
 end subroutine swaptype
-

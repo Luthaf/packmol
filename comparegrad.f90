@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 
 !
 ! Subroutine that performs finite difference and analytical gradient
@@ -33,14 +33,14 @@ subroutine comparegrad(n,x)
     write(*,"( i4,6(tr2,f8.3) )") (i+2)/3, x(i), x(i+1), x(i+2), x(n/2+i),&
                                   x(n/2+i+1),x(n/2+i+2)
   end do
-  write(*,*) 
-  write(*,*) ' Computing gradient ... ' 
+  write(*,*)
+  write(*,*) ' Computing gradient ... '
 
-  call computef(n,x,fx) 
+  call computef(n,x,fx)
   write(*,*) ' Function value on test point: ', fx
-  open(98, file = 'chkgrad.log',status='unknown') 
-  write(98, *)'Function Value = ', fx 
-  call computeg(n,x,g) 
+  open(98, file = 'chkgrad.log',status='unknown')
+  write(98, *)'Function Value = ', fx
+  call computeg(n,x,g)
 
   write(98,"( t2,'Component',t16,'Analytical',t33,'Discrete', &
              &t51,'Error',t62,'Best step' )")
@@ -85,14 +85,13 @@ subroutine discret(icomp,n,x,gcomp,step)
   integer :: n, icomp
   double precision :: save, step, x(n), fplus, fminus, gcomp
 
-  save = x(icomp) 
-  x(icomp) = save + step 
-  call computef(n,x,fplus) 
-  x(icomp) = save - step 
-  call computef(n,x,fminus) 
-  gcomp = (fplus - fminus) / (2.d0 * step) 
-  x(icomp) = save 
+  save = x(icomp)
+  x(icomp) = save + step
+  call computef(n,x,fplus)
+  x(icomp) = save - step
+  call computef(n,x,fminus)
+  gcomp = (fplus - fminus) / (2.d0 * step)
+  x(icomp) = save
 
-  return      
+  return
 end subroutine discret
-

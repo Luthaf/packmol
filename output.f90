@@ -2,7 +2,7 @@
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
-!  
+!
 ! Subroutine output: Subroutine that writes the output file
 !
 
@@ -17,9 +17,9 @@ subroutine output(n,x)
              irest, iimol, ichain, iatom, irec, ilres, ifres,&
              iires, strlength, irescount,&
              icart, i_ref_atom, ioerr
-  integer :: nr, nres, imark  
+  integer :: nr, nres, imark
   integer :: i_fixed, i_not_fixed
-  
+
   double precision :: x(n)
   double precision :: tens(4,4), v(4,4), dv(4)
   double precision :: v1(3), v2(3), v3(3)
@@ -43,7 +43,7 @@ subroutine output(n,x)
   !
   ! Write restart files, if required
   !
-  
+
   ! Restart file for all system
 
   if ( restart_to(0) /= 'none' ) then
@@ -94,11 +94,11 @@ subroutine output(n,x)
   ! Write the output (xyz file)
 
   if(xyz) then
-    open(30,file=xyzout,status='unknown') 
+    open(30,file=xyzout,status='unknown')
     write(30,*) ntotat
-    write(30,*) title 
-    ilubar = 0 
-    ilugan = ntotmol*3 
+    write(30,*) title
+    ilubar = 0
+    ilugan = ntotmol*3
     icart = 0
     i_not_fixed = 0
     i_fixed = ntype
@@ -106,25 +106,25 @@ subroutine output(n,x)
       if ( .not. fixedoninput(itype) ) then
         i_not_fixed = i_not_fixed + 1
         do imol = 1, nmols(i_not_fixed)
-          xbar = x(ilubar+1) 
-          ybar = x(ilubar+2) 
+          xbar = x(ilubar+1)
+          ybar = x(ilubar+2)
           zbar = x(ilubar+3)
           beta = x(ilugan+1)
           gama = x(ilugan+2)
           teta = x(ilugan+3)
-          call eulerrmat(beta,gama,teta,v1,v2,v3)   
-          idatom = idfirst(i_not_fixed) - 1      
-          do iatom = 1, natoms(i_not_fixed) 
+          call eulerrmat(beta,gama,teta,v1,v2,v3)
+          idatom = idfirst(i_not_fixed) - 1
+          do iatom = 1, natoms(i_not_fixed)
             icart = icart + 1
             idatom = idatom + 1
             call compcart(icart,xbar,ybar,zbar,&
                           coor(idatom,1),coor(idatom,2),&
                           coor(idatom,3),&
-                          v1,v2,v3) 
+                          v1,v2,v3)
             write(30,"( tr2,a3,tr2,3(tr2,f14.6) )") ele(idatom), (xcart(icart, k), k = 1, 3)
-          end do 
-          ilugan = ilugan + 3 
-          ilubar = ilubar + 3 
+          end do
+          ilugan = ilugan + 3
+          ilubar = ilubar + 3
         end do
       else
         i_fixed = i_fixed + 1
@@ -141,15 +141,15 @@ subroutine output(n,x)
   ! write the output as a MOLDY file
 
   if(moldy) then
-    open(30,file=xyzout,status='unknown') 
-    ! For square moldy boxes, this must be the side dimensions of the box 
+    open(30,file=xyzout,status='unknown')
+    ! For square moldy boxes, this must be the side dimensions of the box
     sxmin = 1.d30
     symin = 1.d30
     szmin = 1.d30
     sxmax = -1.d30
     symax = -1.d30
     szmax = -1.d30
-    do irest = 1, nrest 
+    do irest = 1, nrest
       if(ityperest(irest).eq.2) then
         sxmin = dmin1(restpars(irest,1),sxmin)
         symin = dmin1(restpars(irest,2),symin)
@@ -183,25 +183,25 @@ subroutine output(n,x)
     ylength = symax - symin
     zlength = szmax - szmin
     write(30,"( 3(tr1,f12.6),' 90 90 90 1 1 1 ' )") xlength, ylength, zlength
-    ilubar = 0 
-    ilugan = ntotmol*3 
+    ilubar = 0
+    ilugan = ntotmol*3
     i_not_fixed = 0
     i_fixed = ntype
     do itype = 1, ntfix
       if ( .not. fixedoninput(itype) ) then
         i_not_fixed = i_not_fixed + 1
         record = name(i_not_fixed)
-        do imol = 1, nmols(i_not_fixed) 
+        do imol = 1, nmols(i_not_fixed)
           xbar = (x(ilubar+1) - sxmin) / xlength
           ybar = (x(ilubar+2) - symin) / ylength
           zbar = (x(ilubar+3) - szmin) / zlength
           beta = x(ilugan+1)
           gama = x(ilugan+2)
           teta = x(ilugan+3)
-          call eulerrmat(beta,gama,teta,v1,v2,v3)  
- 
-          ! Computing cartesian coordinates and quaternions 
- 
+          call eulerrmat(beta,gama,teta,v1,v2,v3)
+
+          ! Computing cartesian coordinates and quaternions
+
           xxyx = 0.d0
           xxyy = 0.d0
           xxyz = 0.d0
@@ -210,19 +210,19 @@ subroutine output(n,x)
           xyyz = 0.d0
           xzyx = 0.d0
           xzyy = 0.d0
-          xzyz = 0.d0 
-          idatom = idfirst(i_not_fixed) - 1      
-          do iatom = 1, natoms(i_not_fixed) 
+          xzyz = 0.d0
+          idatom = idfirst(i_not_fixed) - 1
+          do iatom = 1, natoms(i_not_fixed)
             idatom = idatom + 1
             xq =   coor(idatom, 1)*v1(1) &
                  + coor(idatom, 2)*v2(1) &
-                 + coor(idatom, 3)*v3(1)    
+                 + coor(idatom, 3)*v3(1)
             yq =   coor(idatom, 1)*v1(2) &
                  + coor(idatom, 2)*v2(2) &
-                 + coor(idatom, 3)*v3(2)    
+                 + coor(idatom, 3)*v3(2)
             zq =   coor(idatom, 1)*v1(3) &
                  + coor(idatom, 2)*v2(3) &
-                 + coor(idatom, 3)*v3(3)   
+                 + coor(idatom, 3)*v3(3)
 
             ! Recovering quaternions for molecule imol
 
@@ -234,7 +234,7 @@ subroutine output(n,x)
             xyyz = xyyz + yq * coor(idatom,3) * amass(idatom)
             xzyx = xzyx + zq * coor(idatom,1) * amass(idatom)
             xzyy = xzyy + zq * coor(idatom,2) * amass(idatom)
-            xzyz = xzyz + zq * coor(idatom,3) * amass(idatom) 
+            xzyz = xzyz + zq * coor(idatom,3) * amass(idatom)
           end do
 
           tens(1,1) = xxyx + xyyy + xzyz
@@ -253,14 +253,14 @@ subroutine output(n,x)
           q1 = v(2,4)
           q2 = v(3,4)
           q3 = v(4,4)
-          record = name(i_not_fixed) 
-          xbar = dmin1(0.999999d0,xbar)     
-          ybar = dmin1(0.999999d0,ybar)     
-          zbar = dmin1(0.999999d0,zbar)     
+          record = name(i_not_fixed)
+          xbar = dmin1(0.999999d0,xbar)
+          ybar = dmin1(0.999999d0,ybar)
+          zbar = dmin1(0.999999d0,zbar)
           write(30,"( a10,tr1,7(f12.6) )") record(1:strlength(record)), xbar, ybar, zbar, &
                          q0, q1, q2, q3
-          ilugan = ilugan + 3 
-          ilubar = ilubar + 3 
+          ilugan = ilugan + 3
+          ilubar = ilubar + 3
         end do
       else
         i_fixed = i_fixed + 1
@@ -279,10 +279,10 @@ subroutine output(n,x)
              teta = -restpars(irest,6)
           end if
         end do
-        call eulerrmat(beta,gama,teta,v1,v2,v3) 
-  
-        ! Computing cartesian coordinates and quaternions 
- 
+        call eulerrmat(beta,gama,teta,v1,v2,v3)
+
+        ! Computing cartesian coordinates and quaternions
+
         xxyx = 0.d0
         xxyy = 0.d0
         xxyz = 0.d0
@@ -291,16 +291,16 @@ subroutine output(n,x)
         xyyz = 0.d0
         xzyx = 0.d0
         xzyy = 0.d0
-        xzyz = 0.d0 
-        idatom = idfirst(i_fixed) - 1      
-        do iatom = 1, natoms(i_fixed) 
+        xzyz = 0.d0
+        idatom = idfirst(i_fixed) - 1
+        do iatom = 1, natoms(i_fixed)
           idatom = idatom + 1
           xtemp = coor(idatom,1) - xcm
           ytemp = coor(idatom,2) - ycm
           ztemp = coor(idatom,3) - zcm
-          xq =   xtemp*v1(1) + ytemp*v2(1) + ztemp*v3(1)    
-          yq =   xtemp*v1(2) + ytemp*v2(2) + ztemp*v3(2)    
-          zq =   xtemp*v1(3) + ytemp*v2(3) + ztemp*v3(3)   
+          xq =   xtemp*v1(1) + ytemp*v2(1) + ztemp*v3(1)
+          yq =   xtemp*v1(2) + ytemp*v2(2) + ztemp*v3(2)
+          zq =   xtemp*v1(3) + ytemp*v2(3) + ztemp*v3(3)
           xxyx = xxyx + xtemp * xq * amass(idatom)
           xxyy = xxyy + xtemp * yq * amass(idatom)
           xxyz = xxyz + xtemp * zq * amass(idatom)
@@ -331,15 +331,15 @@ subroutine output(n,x)
         ycm = ycm / ylength
         zcm = zcm / zlength
         record = name(itype)
-        xcm = dmin1(0.999999d0,xcm)     
-        ycm = dmin1(0.999999d0,ycm)     
-        zcm = dmin1(0.999999d0,zcm)     
+        xcm = dmin1(0.999999d0,xcm)
+        ycm = dmin1(0.999999d0,ycm)
+        zcm = dmin1(0.999999d0,zcm)
         write(30,"( a10,tr1,7(f12.6) )") record(1:strlength(record)),&
                        xcm, ycm, zcm, q0, q1, q2, q3
       end if
     end do
-    close(30) 
-  end if 
+    close(30)
+  end if
 
   ! write the output as pdb file
 
@@ -358,9 +358,9 @@ subroutine output(n,x)
                             &t23,i4,t27,a1,t31,f8.3,t39,&
                             &f8.3,t47,f8.3,t55,a26 )"
 
-    open(30,file=xyzout,status='unknown') 
- 
-    write(30,"( & 
+    open(30,file=xyzout,status='unknown')
+
+    write(30,"( &
             &'HEADER ',/&
             &'TITLE    ', a64,/&
             &'REMARK   Packmol generated pdb file ',/&
@@ -373,13 +373,13 @@ subroutine output(n,x)
                      &t34,f7.2,t41,f7.2,t48,f7.2,&
                      &t56,'P 1           1' )") &
             sizemax(1)-sizemin(1) + add_sides_fix,&
-            sizemax(2)-sizemin(2) + add_sides_fix,& 
+            sizemax(2)-sizemin(2) + add_sides_fix,&
             sizemax(3)-sizemin(3) + add_sides_fix,&
             90., 90., 90.
     end if
-      
-    ilubar = 0 
-    ilugan = ntotmol*3 
+
+    ilubar = 0
+    ilugan = ntotmol*3
     icart = 0
     i_ref_atom = 0
     iimol = 0
@@ -387,7 +387,7 @@ subroutine output(n,x)
     i_not_fixed = 0
     i_fixed = ntype
     irescount = 1
-    do itype = 1, ntfix 
+    do itype = 1, ntfix
       if ( .not. fixedoninput(itype) ) then
         i_not_fixed = i_not_fixed + 1
 
@@ -423,7 +423,7 @@ subroutine output(n,x)
           record(irec:irec) = ' '
         end do
 
-        mol: do imol = 1, nmols(i_not_fixed) 
+        mol: do imol = 1, nmols(i_not_fixed)
           iimol = iimol + 1
 
           if( chain(i_not_fixed) == "#" ) then
@@ -433,7 +433,7 @@ subroutine output(n,x)
                 call chainc(ichain,odd_chain)
                 ichain = ichain + 1
                 call chainc(ichain,even_chain)
-              else 
+              else
                 call chainc(ichain,even_chain)
                 odd_chain = even_chain
               end if
@@ -444,17 +444,17 @@ subroutine output(n,x)
             write_chain = chain(i_not_fixed)
           end if
 
-          xbar = x(ilubar+1) 
-          ybar = x(ilubar+2) 
-          zbar = x(ilubar+3) 
+          xbar = x(ilubar+1)
+          ybar = x(ilubar+2)
+          zbar = x(ilubar+3)
           beta = x(ilugan+1)
           gama = x(ilugan+2)
           teta = x(ilugan+3)
 
           call eulerrmat(beta,gama,teta,v1,v2,v3)
-           
+
           rewind(15)
-          idatom = idfirst(i_not_fixed) - 1     
+          idatom = idfirst(i_not_fixed) - 1
           iatom = 0
           do while(iatom.lt.natoms(i_not_fixed))
 
@@ -464,7 +464,7 @@ subroutine output(n,x)
               cycle
             end if
 
-            iatom = iatom + 1 
+            iatom = iatom + 1
             icart = icart + 1
             idatom = idatom + 1
             i_ref_atom = i_ref_atom + 1
@@ -512,10 +512,10 @@ subroutine output(n,x)
             end if
           end do
           irescount = irescount + nres
-          ilugan = ilugan + 3 
-          ilubar = ilubar + 3 
- 
-          if(add_amber_ter) write(30,"('TER')") 
+          ilugan = ilugan + 3
+          ilubar = ilubar + 3
+
+          if(add_amber_ter) write(30,"('TER')")
         end do mol
         close(15)
 
@@ -537,9 +537,9 @@ subroutine output(n,x)
               write(*,*) ' ERROR: Failed reading residue number ',&
                          ' from PDB file: ', record(1:strlength(record))
               write(*,*) ' Residue numbers are integers that must',&
-                         ' be between columns 23 and 26. ' 
+                         ' be between columns 23 and 26. '
               write(*,*) ' Other characters within these columns',&
-                         ' will cause input/output errors. ' 
+                         ' will cause input/output errors. '
               write(*,*) ' Standard PDB format specifications can',&
                          ' be found at: '
               write(*,*) ' www.rcsb.org/pdb '
@@ -575,7 +575,7 @@ subroutine output(n,x)
           else if(resnumbers(i_fixed).eq.1) then
             iires = imark
           else if(resnumbers(i_fixed).eq.2) then
-            iires = mod(imark-ifres+irescount,9999) 
+            iires = mod(imark-ifres+irescount,9999)
           else if(resnumbers(i_fixed).eq.3) then
             iires = mod(iimol,9999)
           end if
@@ -605,25 +605,25 @@ subroutine output(n,x)
         end do
         irescount = irescount + nres
         close(15)
-        if(add_amber_ter) write(30,"('TER')") 
+        if(add_amber_ter) write(30,"('TER')")
       end if
-    end do             
+    end do
     write(30,"('END')")
-    close(30) 
-  end if 
- 
+    close(30)
+  end if
+
   ! Write the output (tinker xyz file)
 
   if(tinker) then
 
     tinker_atom_line = "( i7,tr2,a3,3(tr2,f10.6),9(tr2,i7) )"
 
-    open(30, file = xyzout,status='unknown') 
- 
-    write(30,"( i6,tr2,a64 )") ntotat, title 
+    open(30, file = xyzout,status='unknown')
 
-    ilubar = 0 
-    ilugan = ntotmol*3 
+    write(30,"( i6,tr2,a64 )") ntotat, title
+
+    ilubar = 0
+    ilugan = ntotmol*3
     icart = 0
     i_ref_atom = 0
     i_not_fixed = 0
@@ -633,26 +633,26 @@ subroutine output(n,x)
 
       if ( .not. fixedoninput(itype) ) then
         i_not_fixed = i_not_fixed + 1
-  
-        do imol = 1, nmols(i_not_fixed) 
- 
-          xbar = x(ilubar+1) 
-          ybar = x(ilubar+2) 
-          zbar = x(ilubar+3) 
+
+        do imol = 1, nmols(i_not_fixed)
+
+          xbar = x(ilubar+1)
+          ybar = x(ilubar+2)
+          zbar = x(ilubar+3)
           beta = x(ilugan+1)
           gama = x(ilugan+2)
           teta = x(ilugan+3)
 
-          call eulerrmat(beta,gama,teta,v1,v2,v3) 
+          call eulerrmat(beta,gama,teta,v1,v2,v3)
 
-          idatom = idfirst(i_not_fixed) - 1      
-          do iatom = 1, natoms(i_not_fixed) 
+          idatom = idfirst(i_not_fixed) - 1
+          do iatom = 1, natoms(i_not_fixed)
             icart = icart + 1
             idatom = idatom + 1
             call compcart(icart,xbar,ybar,zbar,&
                           coor(idatom,1),coor(idatom,2),&
                           coor(idatom,3),&
-                          v1,v2,v3)    
+                          v1,v2,v3)
 
             ntcon(1) = nconnect(idatom,1)
             do k = 2, maxcon(idatom)
@@ -661,15 +661,15 @@ subroutine output(n,x)
             write(30,tinker_atom_line) i_ref_atom+iatom,&
                                        ele(idatom), (xcart(icart, k), k = 1, 3),&
                                        (ntcon(k), k = 1, maxcon(idatom))
-          end do 
+          end do
           i_ref_atom = i_ref_atom + natoms(i_not_fixed)
- 
-          ilugan = ilugan + 3 
-          ilubar = ilubar + 3 
- 
-        end do 
 
-      else 
+          ilugan = ilugan + 3
+          ilubar = ilubar + 3
+
+        end do
+
+      else
 
         i_fixed = i_fixed + 1
         idatom = idfirst(i_fixed) - 1
@@ -687,10 +687,9 @@ subroutine output(n,x)
 
       end if
 
-    end do             
-    close(30) 
-  end if   
+    end do
+    close(30)
+  end if
 
   return
 end subroutine output
-

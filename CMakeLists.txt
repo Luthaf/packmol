@@ -5,6 +5,8 @@ project(packmol Fortran)
 SET(CMAKE_BUILD_TYPE release)
 set(CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/mod")
 
+add_subdirectory(chemfiles)
+
 # Default flags for release and debug
 set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Wall")
 set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -Werror")
@@ -51,6 +53,8 @@ add_executable(packmol
 )
 
 set_source_files_properties(gencan.f PROPERTIES COMPILE_FLAGS "-Wno-unused-label -Wno-unused-dummy-argument -Wno-maybe-uninitialized")
+
+target_link_libraries(packmol chemfilesf03)
 
 # Installation directive
 install (TARGETS packmol DESTINATION bin)

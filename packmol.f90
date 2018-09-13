@@ -1,4 +1,4 @@
-!  
+!
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
@@ -271,6 +271,7 @@ program packmol
   ! Setting the array that contains the restrictions per atom
 
   icart = 0
+  iirest = -1
   do itype = 1, ntype
     rests = .false.
     do imol = 1, nmols(itype)
@@ -748,7 +749,7 @@ program packmol
     ! Otherwise, pack the molecules
 
     else
-
+      flast = 0
       loop = -1
       gencanloop : do while(loop.lt.nloop)
         loop = loop + 1

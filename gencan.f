@@ -2190,7 +2190,7 @@ C         Call conjugate gradients
      +    cgiter,rbdtype,rbdind,inform,w(1),w(n+1),w(2*n+1),w(3*n+1),
      +    w(4*n+1),theta,sterel,steabs,epsrel,epsabs,infrel,infabs)
 
-	  cgcnt = cgcnt + cgiter
+          cgcnt = cgcnt + cgiter
 
           if ( inform .lt. 0 ) then
 

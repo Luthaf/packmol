@@ -1,4 +1,4 @@
-!  
+!
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
@@ -852,6 +852,7 @@ subroutine setrnum(file,nres)
   open(10,file=file,status='old')
   iread = 0
   nres = 1
+  ireslast = -1
   do while(nres.eq.1)
     read(10,"( a200 )",iostat=ioerr) record
     if ( ioerr /= 0 ) exit

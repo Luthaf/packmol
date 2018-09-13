@@ -50,5 +50,7 @@ add_executable(packmol
     input.f90
 )
 
+set_source_files_properties(gencan.f PROPERTIES COMPILE_FLAGS "-Wno-unused-label -Wno-unused-dummy-argument -Wno-maybe-uninitialized")
+
 # Installation directive
 install (TARGETS packmol DESTINATION bin)

@@ -1,4 +1,4 @@
-!  
+!
 !  Written by Leandro Martínez, 2009-2011.
 !  Copyright (c) 2009-2018, Leandro Martínez, Jose Mario Martinez,
 !  Ernesto G. Birgin.
@@ -387,6 +387,7 @@ subroutine output(n,x)
     i_not_fixed = 0
     i_fixed = ntype
     irescount = 1
+    ilres = -1
     do itype = 1, ntfix
       if ( .not. fixedoninput(itype) ) then
         i_not_fixed = i_not_fixed + 1
